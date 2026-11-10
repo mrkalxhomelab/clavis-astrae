@@ -1,0 +1,15 @@
+{
+  "name": "clavis-astrae",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "One-Time Pad letters between two people, in the guise of a medieval astronomical manuscript.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "vectors": "node tools/make_vectors.mjs"
+  },
+  "devDependencies": {
+    "hash-wasm": "4.13.0"
+  },
+  "license": "MIT"
+}

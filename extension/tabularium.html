@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tabularium · Clavis Astrae</title>
+<link rel="icon" href="icons/icon-48.png">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  #app { max-width: 820px; }
+  .filerow { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; padding: 12px 0; border-top: 1px solid #DCCBA6; }
+  .filerow .n { font-family: 'Cinzel', serif; font-size: 15px; letter-spacing: .04em; word-break: break-all; }
+  .filerow .m { font-size: 14px; color: var(--ink-soft); }
+  .filerow .row .btn { min-height: 40px; font-size: 12px; padding: 0 12px; flex: 0 0 auto; }
+  .drop { border: 2px dashed var(--gold); padding: 18px; text-align: center; background: var(--vellum); }
+  .drop.over { background: #F1E5C8; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script type="module" src="src/page.js"></script>
+</body>
+</html>

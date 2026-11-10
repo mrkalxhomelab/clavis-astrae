@@ -8,6 +8,7 @@ import { ALPHABET, groupGlyphs, encodeGlyphs, BEGIN, END, TransitError, dearmor 
 import { framedSize, MAC_LEN, MAX_PLAINTEXT, PAD_SIZES } from '../core/protocol.js';
 import { utf8, toHex } from '../core/bytes.js';
 import { MIN_PASSPHRASE } from '../core/vault.js';
+import { sealFile, openFile, mimeFor, MIN_DOC_PASSPHRASE } from '../core/tabularium.js';
 
 const app = document.getElementById('app');
 const session = new Session(new IDBStore());
@@ -53,7 +54,10 @@ function notice(head, body, good = false) {
 function errorText(e) {
   const map = {
     badpass: ['Clavis falsa', 'Wrong passphrase or code, or the file is damaged.'],
-    weak: ['Nimis brevis', `Use at least ${MIN_PASSPHRASE} characters. A short sentence works well.`],
+    weak: ['Nimis brevis', `Use at least ${Math.max(MIN_PASSPHRASE, MIN_DOC_PASSPHRASE)} characters. A short sentence works well.`],
+    damaged: ['Corruptum', 'The file is damaged or was altered.'],
+    format: ['Non agnoscitur', e.message],
+    armored: ['Non agnoscitur', 'This age file is in text (armoured) form; only the binary form is supported.'],
     exhausted: ['Clavis exhausta', 'Not enough unused key for this letter. Shorten it, or forge a new key and deliver it in person.'],
     locked: ['Clavis suspensa', 'Sending is suspended after a restore. Set the safe offset in Arca clavium.'],
     toolong: ['Nimis longa', `A letter may hold at most ${MAX_PLAINTEXT} bytes.`],
@@ -181,6 +185,7 @@ const MENU = [
   ['receive', '♀', 'Accipe clavem', 'Receive a key'],
   ['deliver', '♂', 'Trade clavem', 'Deliver a key'],
   ['letters', '♃', 'Epistulae', 'Letters'],
+  ['tabularium', '🜚', 'Tabularium', 'Private documents'],
   ['settings', '⚹', 'Regulae', 'Settings'],
   ['manual', '☊', 'Liber', 'Manual'],
 ];
@@ -586,6 +591,101 @@ async function codexFingerprint() {
   return { hex: toHex(d).match(/.{8}/g).join(' '), glyphs: encodeGlyphs(d.subarray(0, 10)) };
 }
 
+// ---------------------------------------------------------------- tabularium
+let docPass = null; // document passphrase, kept in memory only while unlocked
+const blobUrls = [];
+
+function passFields(confirmToo) {
+  const p1 = h('input', { type: 'password', autocomplete: 'off' });
+  const p2 = h('input', { type: 'password', autocomplete: 'off' });
+  const remember = h('input', { type: 'checkbox' });
+  const wrap = docPass
+    ? h('p', { class: 'small' }, 'Using the document passphrase remembered for this session. ',
+        h('button', { class: 'btn ghost', style: 'min-height:36px; font-size:12px', onclick: () => { docPass = null; go('tabularium'); } }, 'Forget it'))
+    : h('div', null,
+        h('label', { class: 'field' }, h('span', null, 'Document passphrase'), p1),
+        confirmToo ? h('label', { class: 'field', style: 'margin-top:12px' }, h('span', null, 'Once more'), p2) : null,
+        h('label', { class: 'check', style: 'margin-top:12px' }, remember, h('span', null, 'Remember it until the scriptorium closes')));
+  return {
+    el: wrap,
+    get() {
+      if (docPass) return docPass;
+      if (confirmToo && p1.value !== p2.value) throw new Error('The two passphrases differ.');
+      const v = p1.value;
+      if (remember.checked) docPass = v;
+      p1.value = p2.value = '';
+      return v;
+    },
+  };
+}
+
+function urlFor(blob) {
+  const u = URL.createObjectURL(blob);
+  blobUrls.push(u);
+  return u;
+}
+
+VIEWS.tabularium = () => {
+  const sealIn = h('input', { type: 'file' });
+  const hide = h('input', { type: 'checkbox' });
+  const sp = passFields(true);
+  const sealErr = h('div'), sealOut = h('div');
+  const openIn = h('input', { type: 'file', accept: '.age,application/octet-stream' });
+  const op = passFields(false);
+  const openErr = h('div'), openOut = h('div');
+
+  page('TABULARIUM', 'Private documents', [
+    h('p', { class: 'initial' }, 'Seal your own records before you keep them in Google Drive or anywhere else. Only someone with the document passphrase can open them.'),
+    h('p', { class: 'small' }, 'Files use the open age format: you can also open them on any computer with the official age tool, even without this app. This is strong standard encryption (scrypt and ChaCha20-Poly1305), not the One-Time Pad. Its strength rests on your passphrase, which cannot be recovered if forgotten.'),
+
+    h('h2', { class: 'rubric' }, 'Sigilla · Seal'),
+    h('label', { class: 'field' }, h('span', null, 'Document'), sealIn),
+    h('label', { class: 'check' }, hide, h('span', null, 'Hide the file name (the sealed file gets a random name; the real one is kept inside)')),
+    sp.el,
+    sealErr,
+    h('button', { class: 'btn block', onclick: async () => {
+      clear(sealErr); clear(sealOut);
+      try {
+        const f = sealIn.files[0];
+        if (!f) throw new Error('Choose a document.');
+        const pass = sp.get();
+        const r = await busy('Sealing the document…', () => sealFile(f, pass, { hideName: hide.checked }));
+        download(r.name, r.blob, 'application/octet-stream');
+        sealIn.value = '';
+        sealOut.append(notice('Sigillatum', `Saved as “${r.name}” (${fmtBytes(r.blob.size)}). Upload it to Google Drive, then delete the original if you no longer need it on this device.`, true));
+      } catch (e) { showError(sealErr, e); }
+    } }, 'SIGILLA', h('small', null, 'seal')),
+    sealOut,
+
+    h('h2', { class: 'rubric' }, 'Aperi · Open'),
+    h('label', { class: 'field' }, h('span', null, 'Sealed file (.age)'), openIn),
+    op.el,
+    openErr,
+    h('button', { class: 'btn block', onclick: async () => {
+      clear(openErr); clear(openOut);
+      try {
+        const f = openIn.files[0];
+        if (!f) throw new Error('Choose a sealed file.');
+        const pass = op.get();
+        const r = await busy('Opening the document…', () => openFile(f, pass));
+        const typed = new Blob([r.blob], { type: mimeFor(r.name) });
+        const url = urlFor(typed);
+        const isImg = typed.type.startsWith('image/');
+        const isText = typed.type.startsWith('text/') || typed.type === 'application/json';
+        openOut.append(h('div', { class: 'panel ornate' },
+          h('h3', { style: 'margin:0; font-family:Cinzel,serif; font-size:16px' }, r.name),
+          h('p', { class: 'small' }, `${fmtBytes(typed.size)}${r.hiddenName ? ' · name was hidden' : ''}`),
+          isImg ? h('img', { src: url, alt: r.name, style: 'max-width:100%; margin-top:10px; border:1px solid #DCCBA6' }) : null,
+          isText ? h('pre', { class: 'plaintext', style: 'font-family:inherit; font-size:17px; max-height:360px; overflow:auto; margin-top:10px' }, await typed.slice(0, 200000).text()) : null,
+          h('div', { class: 'row', style: 'margin-top:12px' },
+            !isText ? h('a', { class: 'btn', href: url, target: '_blank', rel: 'noopener' }, 'OPEN') : null,
+            h('a', { class: 'btn ghost', href: url, download: r.name }, 'SAVE'))));
+      } catch (e) { showError(openErr, e); }
+    } }, 'APERI', h('small', null, 'open')),
+    openOut,
+  ]);
+};
+
 // ---------------------------------------------------------------- manual
 VIEWS.manual = () => {
   page('LIBER', 'Manual', [h('div', { class: 'manual' },
@@ -606,6 +706,9 @@ function armLock() {
 
 function lockNow(msg) {
   clearTimeout(lockTimer);
+  docPass = null;
+  for (const u of blobUrls) URL.revokeObjectURL(u);
+  blobUrls.length = 0;
   session.lock();
   VIEWS.gate(msg);
 }

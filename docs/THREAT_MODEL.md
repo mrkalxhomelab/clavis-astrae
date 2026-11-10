@@ -35,6 +35,8 @@ CLAVIS ASTRAE is **not** claimed to be unbreakable. It has had no independent au
 | Human error: reusing a pad | Catastrophic: XOR of two plaintexts | App enforces offsets; never wraps; single delivery | Restoring backups carelessly; cloning a browser profile |
 | Human error: weak passphrase | Vault brute-force | Minimum 12 characters; passphrase advice | User choice |
 | Malicious hosting / GitHub account takeover | Modified app steals keys | Self-hosting, 2FA on GitHub, update prompt, version fingerprint | Real. Browsers can install a new service worker when the app is closed. Inherent to web apps |
+| Tabularium files on Drive | Offline guessing of the document passphrase | scrypt 2^18 per guess; minimum 12 characters | Weak passphrase; file sizes and upload times visible to Google |
+| Chrome extension | Has a Google token for its own Drive files | Scope `drive.file` only; passphrase never typed into Google pages | Malware or a malicious extension in the same browser |
 | Browser storage eviction | Loss of the vault | Install to Home Screen, keep backups | iOS Safari policies may change |
 
 ## Secure deletion

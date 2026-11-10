@@ -35,7 +35,7 @@ export function svg(markup) {
 export function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
 
 export function download(name, text, type = 'application/json') {
-  const url = URL.createObjectURL(new Blob([text], { type }));
+  const url = URL.createObjectURL(text instanceof Blob ? text : new Blob([text], { type }));
   const a = h('a', { href: url, download: name, style: 'display:none' });
   document.body.appendChild(a);
   a.click();

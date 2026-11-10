@@ -4,7 +4,7 @@
 
 Private letters between two people, enciphered with a genuine One-Time Pad and dressed as a medieval astronomical manuscript. It is a web app (PWA): it installs on iPhone, Android, Windows and macOS from one link, works fully offline, and needs no account.
 
-> **Status: v1.0.0, not independently audited.** Read [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) before trusting it with anything that matters.
+> **Status: v1.1.0, not independently audited.** Read [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) before trusting it with anything that matters.
 
 ## How it works
 
@@ -15,6 +15,8 @@ Private letters between two people, enciphered with a genuine One-Time Pad and d
 - **Transport**: letters become groups of 32 astrological and alchemical signs, which you can send by any messenger. The signs are only an encoding and add no security.
 
 Full specification: [docs/PROTOCOL.md](docs/PROTOCOL.md).
+
+**Tabularium** (since v1.1): seal your own documents in the open age format for Google Drive or any storage. See [docs/TABULARIUM.md](docs/TABULARIUM.md). An optional Chrome extension in `extension/` opens and uploads them directly on Drive: setup in [docs/EXTENSION_SETUP.md](docs/EXTENSION_SETUP.md).
 
 ## Publish it on GitHub Pages (Guida rapida)
 
@@ -51,7 +53,7 @@ The GitHub Pages steps may change. If something looks different, check https://d
 ## Updating the app
 
 1. Change the files.
-2. Run `node tools/build_assets.mjs <new-version>`.
+2. Run `node tools/build_assets.mjs <new-version>` (and `node tools/build_extension.mjs` if shared code changed).
 3. Upload the changes to GitHub.
 
 Installed copies show *Nova editio* and update only when the user presses UPDATE. After updating, both partners compare the *Signum codicis* (code fingerprint) in *Regulae*: it must match.
@@ -62,7 +64,7 @@ Node 20 or later and Python 3 are required.
 
 ```
 npm install                       # only hash-wasm, for the tests
-npm test                          # 23 automated tests
+npm test                          # automated tests (letters, vault, Tabularium, Drive client)
 node tools/make_vectors.mjs       # regenerate test vectors
 python3 tools/verify_vectors.py   # independent Python check of the vectors
 python3 -m http.server 8000       # then open http://localhost:8000
@@ -72,6 +74,7 @@ The app has no build step and no runtime dependencies from the network.
 
 Third-party code (vendored):
 - `vendor/argon2.umd.min.js` from hash-wasm 4.13.0 (MIT). SHA-256: `acfe11b015852f593aaddc51116f71dc7850e4551e6b34d42c1f88cf39635f03`.
+- `vendor/age.bundle.js`: age-encryption 0.3.1 (BSD-3-Clause) with @noble and @scure libraries (MIT), bundled with esbuild. Provenance is in the file header.
 - Fonts under the SIL Open Font License; see `fonts/LICENSES.md`.
 
 ## Repository map
@@ -85,10 +88,12 @@ src/core/   crypto engine, no DOM:
               traditio.js  key delivery
               session.js   all state changes
               store.js     IndexedDB
+src/core/tabularium.js  age-format document sealing
 src/ui/     interface (app.js), drawings (art.js), manual
+extension/  Chrome extension for Tabularium on Google Drive
 tests/      node tests and test vectors
 tools/      vector generator, independent verifier, asset list
-docs/       PROTOCOL.md, THREAT_MODEL.md (with audit checklist)
+docs/       PROTOCOL.md, THREAT_MODEL.md (audit checklist), TABULARIUM.md, EXTENSION_SETUP.md
 ```
 
 ## Known limitations

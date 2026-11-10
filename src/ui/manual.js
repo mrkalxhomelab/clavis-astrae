@@ -29,6 +29,11 @@ export const MANUAL = [
     'Restoring a backup brings back an older state of your keys. To be sure no byte is used twice, sending is suspended on every key after a restore. Ask your partner to open Arca clavium and read you the “next safe offset” for that key, then enter it. Do this only when every letter you sent before has reached them.',
     'Old backups contain key bytes you have since used. Delete backups you no longer need.',
   ]],
+  ['Tabularium', 'Your private documents', [
+    'Tabularium seals your own files before you keep them in Google Drive or elsewhere. Choose a document and a document passphrase; the app saves a sealed .age file for you to upload. To read it again, open the .age file here with the same passphrase.',
+    'The passphrase is separate from your vault passphrase and cannot be recovered. Files use the open age format, so any computer with the official age tool can open them too, even without this app.',
+    'This is strong standard encryption (scrypt, ChaCha20-Poly1305), not the One-Time Pad: its strength rests on your passphrase. Choose “Hide the file name” to give the sealed file a random name.',
+  ]],
   ['Pericula', 'What this cannot protect against', [
     'Malware on either phone or computer can read everything. A One-Time Pad does not protect an infected device.',
     'Someone who holds your unlocked device can read and write as you.',

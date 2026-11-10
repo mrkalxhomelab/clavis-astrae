@@ -1,0 +1,45 @@
+{
+  "description": "CLAVIS ASTRAE v1 test vectors. Pad: stream[d][i] = SHA-256(\"CLAVIS-TEST-PAD\"||byte(d)||u32be(i div 32))[i mod 32], size 65536, padId 0123456789abcdef.",
+  "vectors": [
+    {
+      "sender": "A",
+      "plaintext": "",
+      "offset": 0,
+      "P": 128,
+      "packet_hex": "434101000123456789abcdef00000000000000806769271c27ea7c6a07270c7c69335e5e9e26a9d95d7235fa2a88b954f495c50e4ac8c17ed42959f48e85706c692643278c9c10f891c17042c7807037610f88c9964ed07bc3ba2bb5ecd390c3b5365aec29b8a5ae8c19eac06ade0c33bff6549c28b3c6e55eac37614b097f6d78c92f6cfc19ab077baf0f9e762cacd57f761e9f0c5a1c0ba22474fa41601031a204c9e757413b17ce824b7f09ed00d0327e1645",
+      "armored": "INCIPIT EPISTULA\n♉♎☉♑☿ ☉☉☽♂♎ ☿🜄♐☿♎ ♌☌☊☊♑ ☉☉☉☉☉ ☉☉☉☉☉\n♂☉♍🜔🜂 ♓♏♈☽♈ 🜔♊🜚♄🜂 ☽☌♈☽♒ 🜚♄♓♍☍ 🜚♌☍♐☿\n♎♋♏☌♌ 🜃☌♀♌🜚 ♒♋♒☿🜍 🜃♊🜔♂🜃 ☋🜂♈♂🜃 ♓♄☽♐⚹\n♋☿♓🜄♐ 🜂♒☍☿☊ ☉⚹♀♊♂ ☌☽♓♐♀ ♂🜍☿♀🜍 ♊♀♑♌♑\n♉♌♀☋☉ 🜍☽☊♍♂ ♈☋♒♓♍ 🜄♊⚹♉♈ ☊♑🜔☍♃ ♏☍🜚☌🜂\n🜍♑☋♏☍ 🜁♍🜄☊♍ ♃♄🜍♋♌ ♌🜂♍♀♈ 🜃♍☉☍🜄 🜚☽♑☌⚹\n🜛🜔♓🜂🜁 ♑🜂♌♈♒ ☊♃♌☍🜄 ♀♏☋♋♌ ☽♃🜛🜄☍ 🜚♄♊♃🜔\n🜄♐☋♄♎ ♌☉🜔🜔☍ 🜚♀🜍🜚♏ ☋🜄♋☌🜃 ♌🜛♏☋♐ ♊🜚♀☿☍\n♀♑♃☍♂ ♊♀🜂🜛♊ ☉🜄☉♂☽ ♒🜂♉☿♍ 🜁☌☍☊♉ ♂🜔♒♐🜁\n🜂☿♊♎🜛 ♑🜁⚹♉☉ ☍☉☌♈🜍 ♃♓♃🜛♋ 🜃☉☽♃☋\nEXPLICIT"
+    },
+    {
+      "sender": "A",
+      "plaintext": "Secretum finis Africae.",
+      "offset": 160,
+      "P": 128,
+      "packet_hex": "434101000123456789abcdef000000a0000000800fc4fbcec46799ae3230aae2972d4d42dc9ba5ebddbf5265dc80ad075a4674486e04b0ebe9bf16edfdd85af7e3a64c4dd0b8d6ee09e0a16bee734a7d7bedd63105056275bb9fd041902ad58faa65a11d61ad8d0340fbeca6842b9abad83fa92467e052d1581a8041e4d7a090a8d40ecc6d972e5338541142ea408629105964dbad9ce678a3ed0aab950aa020c3cfe0538eb4421f114885d13fe7b15cbe10069f",
+      "armored": "INCIPIT EPISTULA\n♉♎☉♑☿ ☉☉☽♂♎ ☿🜄♐☿♎ ♌☌☊☊♑ ☉☉☉☉🜂 ☉☉☉☉☉\n♂☉☽🜛☿ ♐☊🜁🜄♂ ♍🜚♍☍🜍 ♍♒♑🜃♌ ♒♊♏♌♋ ♎♉♌♏♊\n☊♊♐♌⚹ 🜄🜛🜃♂☌ ♏🜍♑☿🜄 ♑♏🜄♓♄ ♏♒♂♄🜍 ☽♃♑🜔♐\n🜂⚹🜚♃☊ ♎🜛☊♍♃ 🜃🜔🜛♀🜂 ☌♄♂⚹🜂 ♃☋☍⚹☊ ☉🜁☋♃☽\n♎♐☊♈♄ ♓🜁🜔♐♐ 🜄🜔♍♍♉ ♃☉🜃♒♈ ♌♏🜍🜛☍ ☽☉☌☉♋\n🜄🜃♒🜚🜃 ♄♌♉♉🜔 ♍♄🜄☋☍ ☉☍☉🜛♐ 🜄♋♎☽☽ ♌🜁♋🜔♎\n♑♐🜔♊♂ ♒🜁🜚☉🜂 🜄♒♌☉♎ ♉☉♑♐♂ ☍🜚♑♊☽ ♋♄🜂☽⚹\n♄♄⚹♃☌ ♏♋♍🜍♃ ♉♂♋☿🜔 ♊☉♉♍♋ ♉♑♌♃♓ ♎☊♌♍🜍\n🜍☌🜍♋♈ ⚹♉♋🜃♏ ♋♑🜃♉☽ ☉☋♐♈🜚 ☉🜂🜍♏🜄 ♒☽☽🜚♂\n♋♉♑☊♉ 🜁🜛☌🜔♒ ♌♓🜛☽☉ ☽🜂🜛♒🜄 ☉♍🜂♈♑\nEXPLICIT"
+    },
+    {
+      "sender": "A",
+      "plaintext": "Perché la città è già più bella così.",
+      "offset": 320,
+      "P": 128,
+      "packet_hex": "434101000123456789abcdef0000014000000080163af8ca8cce9de61d19299e9667ea7f6277552307d40cba84db7781c64541f67a7696d3709591262e9d614b5da2b9de0bb8c1e3ae110c2a0c678b0f52b4feb7d5f98c9932c4b3584f729c746a1c6cebe2570ccb1766c8cc6799a9213b05cf8f95ef67bedb8b902dbabbb33dec4911f546b4d9d418853c31995e03c8bc92e5f32e448b131a2d6839a9ad50c814a7a73429124902df318f8adf8719f2874a03a1",
+      "armored": "INCIPIT EPISTULA\n♉♎☉♑☿ ☉☉☽♂♎ ☿🜄♐☿♎ ♌☌☊☊♑ ☉☉☉☽♉ ☉☉☉☉☉\n♂☉☿☋🜔 ♐♒♓🜂♍ ☌☍♏🜚♍ ♈♉☌♃♄ ♐♊♍☌🜛 ♋♐🜔♒♈\n♏🜃♊♀☉ 🜛♋☉☌♏ 🜂♂⚹♎⚹ ☋♀♒♓♃ ♉♈⚹♈🜂 🜔🜂🜄☍♎\n☋♊♌♂♊ ♄♃☍♏🜄 ☿♓☍🜔🜂 ♋🜍🜔🜍☿ 🜔☋☋♈♒ ☍🜍♂♉♍\n♃♉♄♄♐ ☿☋♐♋♋ ☍♐🜔♎🜚 🜃🜛♄♄♊ ♓♍🜄♂🜄 ♎♍♂🜚🜍\n🜂🜍♏♒🜃 ☽☋⚹♈♌ 🜍♊♌♑☌ ♓☋☊♍⚹ ♂♍☋☌🜍 ☌🜃♂♑🜁\n🜄☽♏♐♒ 🜚♋🜚🜚☌ 🜔🜚⚹♏♃ ☌☉♌♎☍ ☊♏☌🜁⚹ ⚹☿♊☿♈\n☍🜂♎♎♄ ☌☍♑♍♉ ♋♐☽♒🜁 ♃♐☉♈♓ ♃🜍♓♌♓ 🜛♄♌♓♂\n♒♍♊♒🜂 ♌♌♉♈♄ 🜂☍☍🜂♄ ♉☿♓🜁☍ ♏♎☽♊☿ ♊♂♑♃☊\n☌♒♒🜚♃ ♎🜛☽☋☌ 🜚♋♀🜂🜂 ☉🜔☽♏♓ ♊♃🜛♒♉\nEXPLICIT"
+    },
+    {
+      "sender": "B",
+      "plaintext": "Stat rosa pristina nomine, nomina nuda tenemus. ☉🜂",
+      "offset": 0,
+      "P": 128,
+      "packet_hex": "434101010123456789abcdef0000000000000080e5e4e8abc9c06ceac95bdfb7304d77e0061d95547bab9cdfd0fd8a02f6b6832137bd1fa4b85a47c0ad06d403a67007020d8f9c0f307a70ed819c10416f4a8dd1e6511a71d593227b19ba35b3bb1055a641bb2471a78e57342644e9f5841c831e7f9853b0a79c2f14dfb1c18423febcfb6437b81060447b61d57012c472e11b2b517dbfb80c96ccdd5af61ef803177388f9b1f88697fbfaf473101f59952ac039",
+      "armored": "INCIPIT EPISTULA\n♉♎☉♑☿ ☉♉☽♂♎ ☿🜄♐☿♎ ♌☌☊☊♑ ☉☉☉☉☉ ☉☉☉☉☉\n♂☉🜍☊♓ ♏♒♋🜚♊ ☋☽🜄♏🜃 ♓♋⚹⚹🜚 ⚹🜁☉🜁♌ ☊🜍☉♀☽\n⚹♃♋🜂♐ ♏🜃☌☌☊ 🜚♑🜛🜄♃ ☉♃🜔🜃🜄 ♑♍♑🜁♐ ♐♉🜛🜂♓\n🜍♃🜂♒🜚 ☉🜃🜂♀♎ ♉☉🜔♄♏ ☉♀♑♂♀ ♍♐🜁♑♈ 🜁☉🜚🜁♑\n🜔🜄☉☌☋ ♂☿☽♎🜔 ♃♉⚹🜂♐ ♄♋♂♎♈ ♀🜃♍🜁♂ ♊🜔♒🜁♏\n♒🜃🜄♏🜔 ♒☉🜃♎♄ ♉♄🜔♓♉ 🜍♎♈♒☌ ♌🜁♉♊♓ ♂🜔♈☍☋\n♉♈♂♀♀ ☌🜛☌♑🜂 🜔♑🜂🜚♏ ☿🜚♃♄🜛 🜄♈☉☋♉ ♉🜛🜚☊🜁\n🜔🜄♉♎🜔 ☋☿☽♑♂ ♉🜚⚹☽☍ 🜃☋☽♃♒ ♀♓🜍♂♎ ♓🜄🜂♌🜔\n☊🜚🜍☉☌ ♃🜄♍⚹🜃 ♎♐♍♈☊ ☋☉♍♌☊ ♈☿♈☌🜄 ♈🜍♉♎♃\n🜛⚹🜛♌☍ ♈♄♂☉🜛 ♌♄♋♓🜃 ♑☽☌♓🜛 ♒🜁♊♈♑\nEXPLICIT"
+    },
+    {
+      "sender": "A",
+      "plaintext": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "offset": 480,
+      "P": 384,
+      "packet_hex": "434101000123456789abcdef000001e000000180da4cdd8db510a60eddb3396ec75e0ec15e29e2d0dd38fb228f06cddc19f68e566968cf7fb31b240e9917fcacdc84ad837e0ae5ddda5da6697a952b8297bc813edd294715180133a532a13deb5a804a3ee09a70acceb06d36cbeb3c5103a7ce2d2fe5ce188c43c384878e61387b8aabfb855fdfb2a70d43ed152cd0babef06cbf66c676cd6454eb9fbc7c866781e9acb76c19d04ba2e7b5fc30b54c1f91cfc683fb33d397b2345b10d6c8c42ffed40ad211ec7ebda883034c59ec7d871f9115b471215ca8c81d64eac8f3a2f8deb417f1d81574d47aa86a7140c8bbb49b31e37430fa3d772ea52441c9c75d6b4ffc32def044afd489cb9dba38d39ebf4abadb2d60b73bcd427b1fe4b7abf9009bd3520f08bc63afd9e02bb17f66ce44fb6d577a3e6b0ac1ea085194ee620bab215655519dfdb5fb842e59b00e882ed3597e73a92a76eae4b414316df83d835a09d1fc175ca75f1dcda8312d06fc9260b95223848e83403bdea2594975f7b44615c81ee33555d6ca793904dcf5c663acc074b63b4805a29e31d78406898aebe96efdce53c9c2920040d2934c59acc8e22e78d091",
+      "armored": "INCIPIT EPISTULA\n♉♎☉♑☿ ☉☉☽♂♎ ☿🜄♐☿♎ ♌☌☊☊♑ ☉☉☉☽🜍 ☉☉☉☉☉\n♍☉⚹♊♄ ♎⚹♀♎🜃 ☿☿🜁☉🜔 ☊♎🜁♈♃ ☊♍♏☊♑ ♏☋♃♐☿\n🜁☋🜄♑⚹ 🜂🜍♐🜄♉ 🜂♐☉⚹♄ 🜔☋♄♐🜄 ♒☌♌♄♓ ☍♄♐♐🜚\n☌♒🜄♊☉ ♏🜁♂♌🜛 ☌♌♄🜍♑ ♓🜄☋♄🜛 ♑♋🜍☊♏ 🜔🜂☊♎♄\n♎♃🜔♊♋ ♋🜍☿♓🜚 🜚♉☿♐🜄 🜔♃♃♀♒ ♋♄☉☽♄ ♏♓🜁♃♉\n♊🜔🜔♎♎ ♉☉♓♒🜚 🜍☿♎♈☽ ♌♄♏🜄☽ 🜄🜁♎♓🜛 ♌♈♒♉♑\n♈♊🜚♏♃ 🜂☊🜚♌🜁 ♑☋♒♒☽ 🜍♈☽♂♈ ♒☌♑🜁♑ 🜚🜍♋🜃♐\n🜔☋♋☊🜚 🜛🜄♋🜁♑ ☍♑🜛♎☿ 🜂🜄♎☽♏ 🜃🜚🜚☽🜄 ♌🜚☌🜄♄\n♏⚹♄🜄♉ 🜃♈♌🜁🜚 🜚♈☌☽🜁 ♈♑♈🜂☍ ☌♎⚹♍♀ ♈♉♂☊♉\n☊♈🜄☊🜚 ♀☽♎♋♍ ♀🜚♉🜍🜛 ♒🜂♀🜛♍ ☌🜔♈♃🜔 ♓♄♒♎♒\n☽🜃🜄♉☋ ♑☊🜛🜔🜃 ☉♋☍♉♉ 🜚☋🜛🜃🜔 🜃☿☽♑♄ 🜁☿☌🜔♒\n🜚☋♏♈🜍 ♒☿🜄☍♈ ☿♉♋🜍🜃 ♀♂☽☍☌ ♈♋☌♀☌ ☍♃🜚♄🜚\n🜄♑♌🜛♀ 🜄☉🜃♏🜁 ♋♈🜃♋♀ ♋♏♃☉♍ ♒♏🜔🜂🜁 ♍☋🜚♄🜔\n☽♑🜛♉🜚 ☊♏♌🜃♃ ♂♒☉🜍🜁 ♒☍🜔♎♎ ♈🜛☋♍🜄 🜚🜚☽☿♋\n🜛🜃♂♊☌ ♏♏⚹🜂♏ ♄🜁🜁☍🜛 🜂🜃♏🜄⚹ ♃🜃♑♌♏ ♏🜚♎♉♊\n🜔♒🜛☌♃ ☊🜃♐🜍♑ ☽♄🜚🜁♋ ♉♈♑♒♐ ♀♀🜃🜛♍ 🜚☉♋🜔♒\n♐🜔🜁♍🜍 ♒♈⚹♎🜃 ♌☊🜂♐🜁 ♌☽♌☉🜚 🜂☿☿♒♓ 🜁☊♄♂☿\n🜔♌♂♃♌ ♃♋🜂♍🜔 🜛🜄☍🜛☊ ☽☽♏♌♄ ☋☉🜔☿☽ ♏☍♎♍☊\n🜍🜍🜔♊♃ ♊⚹♏🜃☌ ♃🜂☿♑☋ 🜄⚹🜚☽🜔 ♑♎♎☉🜁 🜂♐🜍☿🜔\n♏♋♏☊☋ 🜔☌🜄🜂♀ ☿♌♉♄🜛 ♓♊♄☽♏ ♋♓♂♏☿ ♉🜔☉☍☉\n♈♐♐♋♂ 🜄♋♊♏☊ ⚹⚹♉♒♑ 🜃☌☉♐♏ ♄♎♋🜃☍ ⚹♃♈♓♏\n♉♂⚹🜁☍ 🜍♍☋🜔♍ ☋☽☍♌♍ ♏☍♉☉🜄 ♒♊🜍♍♏ ☊♑♑♀♉\n🜁☿☊♌🜔 ♃☊♐⚹🜁 ♓🜁☌♈☽ ♊♂☉☿☉ ☍♋♊🜂☋ 🜄♎♍☌♀\n♒☿🜍🜚♄ ♑♓♄☍♉ 🜂🜃♋☊\nEXPLICIT"
+    }
+  ]
+}

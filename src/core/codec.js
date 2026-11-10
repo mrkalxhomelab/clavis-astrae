@@ -80,7 +80,7 @@ export function decodeGlyphs(text) {
   const vals = [];
   for (const ch of text) {
     const cp = ch.codePointAt(0);
-    if (cp === 0xfe0e || cp === 0xfe0f || /\s/u.test(ch)) continue;
+    if (cp === 0xfe0e || cp === 0xfe0f || cp === 0x200b || cp === 0x200c || cp === 0x200d || /\s/u.test(ch)) continue;
     const v = VALUE.get(cp);
     if (v === undefined) throw new TransitError(`unknown sign “${ch}”`);
     vals.push(v);
@@ -96,18 +96,25 @@ export function groupGlyphs(glyphs, size = 5) {
   return out;
 }
 
-export function armor(packet, perLine = 6) {
+export const BEGIN_TABULA = 'INCIPIT TABULA';
+
+export function armor(packet, perLine = 6, begin = BEGIN) {
   const wire = concat(packet, u32be(crc32(packet)));
   const groups = groupGlyphs(encodeGlyphs(wire));
   const lines = [];
   for (let i = 0; i < groups.length; i += perLine) lines.push(groups.slice(i, i + perLine).join(' '));
-  return `${BEGIN}\n${lines.join('\n')}\n${END}`;
+  return `${begin}\n${lines.join('\n')}\n${END}`;
 }
 
-export function dearmor(text) {
+export function dearmor(text, begin = BEGIN) {
+  text = String(text).replace(/[   ]/g, ' ');
   let body = text;
-  const b = text.indexOf(BEGIN);
-  if (b >= 0) body = body.slice(b + BEGIN.length);
+  const other = begin === BEGIN ? BEGIN_TABULA : BEGIN;
+  if (text.includes(other) && !text.includes(begin)) {
+    throw new TransitError(begin === BEGIN ? 'this is a sealed document (Tabula), not a letter: open it in Tabularium' : 'this is a letter (Epistula), not a sealed document: open it in Lege');
+  }
+  const b = text.indexOf(begin);
+  if (b >= 0) body = body.slice(b + begin.length);
   const e = body.indexOf(END);
   if (e >= 0) body = body.slice(0, e);
   const wire = decodeGlyphs(body);

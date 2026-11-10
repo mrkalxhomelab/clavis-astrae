@@ -6,10 +6,12 @@
 <link rel="stylesheet" href="css/style.css">
 <style>
   body { background: var(--night); min-height: 0; }
-  .pop { width: 280px; padding: 18px; background: var(--night); color: var(--parchment); text-align: center; }
-  .pop h1 { font-family: 'Cinzel', serif; letter-spacing: .14em; font-size: 18px; margin: 6px 0 2px; }
-  .pop p { font-style: italic; color: var(--gold-bright); font-size: 14px; margin: 0 0 14px; }
-  .pop img { width: 48px; height: 48px; }
+  .pop { width: 300px; padding: 18px; background: var(--night); color: var(--parchment); text-align: center; display: flex; flex-direction: column; gap: 10px; }
+  .pop h1 { font-family: 'Cinzel', serif; letter-spacing: .14em; font-size: 18px; margin: 4px 0 0; }
+  .pop p { font-style: italic; color: var(--gold-bright); font-size: 14px; margin: 0 0 6px; }
+  .pop img { width: 48px; height: 48px; margin: 0 auto; }
+  .pop .btn.ghost { color: var(--gold-bright); border-color: var(--gold-bright); }
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body>
@@ -17,7 +19,9 @@
   <img src="icons/icon-128.png" alt="">
   <h1>TABULARIUM</h1>
   <p>De occultis stellarum</p>
-  <button class="btn block" id="open">APERI <small>open</small></button>
+  <button class="btn block" id="doc" hidden>THIS DOCUMENT <small>seal or open</small></button>
+  <button class="btn block" id="tabula">A GOOGLE DOC <small>by link</small></button>
+  <button class="btn ghost block" id="files">SEALED FILES <small>.age on Drive</small></button>
 </div>
 <script src="src/popup.js"></script>
 </body>

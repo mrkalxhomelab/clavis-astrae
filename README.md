@@ -4,7 +4,7 @@
 
 Private letters between two people, enciphered with a genuine One-Time Pad and dressed as a medieval astronomical manuscript. It is a web app (PWA): it installs on iPhone, Android, Windows and macOS from one link, works fully offline, and needs no account.
 
-> **Status: v1.1.0, not independently audited.** Read [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) before trusting it with anything that matters.
+> **Status: v1.2.0, not independently audited.** Read [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) before trusting it with anything that matters.
 
 ## How it works
 
@@ -16,7 +16,7 @@ Private letters between two people, enciphered with a genuine One-Time Pad and d
 
 Full specification: [docs/PROTOCOL.md](docs/PROTOCOL.md).
 
-**Tabularium** (since v1.1): seal your own documents in the open age format for Google Drive or any storage. See [docs/TABULARIUM.md](docs/TABULARIUM.md). An optional Chrome extension in `extension/` opens and uploads them directly on Drive: setup in [docs/EXTENSION_SETUP.md](docs/EXTENSION_SETUP.md).
+**Tabularium** (since v1.1): seal your own documents in the open age format for Google Drive or any storage. See [docs/TABULARIUM.md](docs/TABULARIUM.md). Since v1.2, **Tabula** also seals Google Docs into astrological signs, readable only through the extension or the app. An optional Chrome extension in `extension/` opens and uploads sealed files and sealed Google Docs directly on Google: setup in [docs/EXTENSION_SETUP.md](docs/EXTENSION_SETUP.md).
 
 ## Publish it on GitHub Pages (Guida rapida)
 
@@ -89,10 +89,11 @@ src/core/   crypto engine, no DOM:
               session.js   all state changes
               store.js     IndexedDB
 src/core/tabularium.js  age-format document sealing
+src/core/tabula.js      sealed text in glyphs (for Google Docs)
 src/ui/     interface (app.js), drawings (art.js), manual
 extension/  Chrome extension for Tabularium on Google Drive
 tests/      node tests and test vectors
-tools/      vector generator, independent verifier, asset list
+tools/      vector generator, independent verifiers (verify_vectors.py, tabula_decode.py), asset list
 docs/       PROTOCOL.md, THREAT_MODEL.md (audit checklist), TABULARIUM.md, EXTENSION_SETUP.md
 ```
 

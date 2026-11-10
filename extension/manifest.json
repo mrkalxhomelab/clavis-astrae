@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "Clavis Astrae · Tabularium",
   "short_name": "Tabularium",
-  "version": "1.1.0",
-  "description": "Seal and open your private documents on Google Drive (age format). Decryption happens only on this computer.",
+  "version": "1.2.0",
+  "description": "Seal your Google Docs into astrological signs and your files into .age, and open them only on this computer.",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtledt0t5ioxvUumnR6srlSj2Fz1uPrPkVqz74Pmm9S7LE3jMyKTZMXLdUGQZ4EVRtA40YUJ/pxZOEtNb/rKrtaf2SoMXQuuf7eK8+j6vK2LYnP+OWjEN8Zh/GnCqtQsZCSEqIOJZN53sgTPbPajyhOvguU6mUG7GJSV9eOllzvKeDzv4RGPEDHJDaApUiThKr4yFCOIEO60IWpp0u28yMyKb6MnLtKgIHTZy0yo2Cw+FPgVKJkmyOiVQzpxyEAQMT/M4kKHtdBYDab74t0obR+YGvsWySbGhH58nUMz9BZ5NSVZJ7pU3F4TuJgjfuBzGcNBfp20va4nECqOJZxxsuwIDAQAB",
   "icons": {
     "16": "icons/icon-16.png",
@@ -20,19 +20,22 @@
   },
   "permissions": [
     "identity",
-    "storage"
+    "storage",
+    "activeTab"
   ],
   "host_permissions": [
-    "https://www.googleapis.com/*"
+    "https://www.googleapis.com/*",
+    "https://docs.googleapis.com/*"
   ],
   "oauth2": {
     "client_id": "PASTE-YOUR-CLIENT-ID.apps.googleusercontent.com",
     "scopes": [
-      "https://www.googleapis.com/auth/drive.file"
+      "https://www.googleapis.com/auth/drive.file",
+      "https://www.googleapis.com/auth/documents"
     ]
   },
   "content_security_policy": {
-    "extension_pages": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src https://www.googleapis.com; frame-src 'self' blob:; object-src 'none'; base-uri 'none'"
+    "extension_pages": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src https://www.googleapis.com https://docs.googleapis.com; frame-src 'self' blob:; object-src 'none'; base-uri 'none'"
   },
   "minimum_chrome_version": "116"
 }

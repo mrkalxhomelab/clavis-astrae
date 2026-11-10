@@ -8,6 +8,8 @@ const ext = join(root, 'extension');
 const copy = (from, to) => { mkdirSync(join(ext, to, '..'), { recursive: true }); cpSync(join(root, from), join(ext, to), { recursive: true }); };
 copy('src/core/tabularium.js', 'src/core/tabularium.js');
 copy('src/core/bytes.js', 'src/core/bytes.js');
+copy('src/core/codec.js', 'src/core/codec.js');
+copy('src/core/tabula.js', 'src/core/tabula.js');
 copy('src/ui/dom.js', 'src/ui/dom.js');
 copy('vendor/age.bundle.js', 'vendor/age.bundle.js');
 for (const l of ['age-encryption', 'noble-ciphers', 'noble-hashes', 'noble-curves', 'noble-post-quantum', 'scure-base']) copy(`vendor/${l}.LICENSE`, `vendor/${l}.LICENSE`);

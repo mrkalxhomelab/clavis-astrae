@@ -9,6 +9,7 @@ import { framedSize, MAC_LEN, MAX_PLAINTEXT, PAD_SIZES } from '../core/protocol.
 import { utf8, toHex } from '../core/bytes.js';
 import { MIN_PASSPHRASE } from '../core/vault.js';
 import { sealFile, openFile, mimeFor, MIN_DOC_PASSPHRASE } from '../core/tabularium.js';
+import { sealText, openText } from '../core/tabula.js';
 
 const app = document.getElementById('app');
 const session = new Session(new IDBStore());
@@ -68,6 +69,8 @@ function errorText(e) {
   };
   const m = map[e.code];
   if (m) return m;
+  if (e instanceof TransitError && /sealed document/.test(e.message)) return ['Tabula, non epistula', 'This is a sealed document, not a letter. Open it in Tabularium, section Tabula.'];
+  if (e instanceof TransitError && /is a letter/.test(e.message)) return ['Epistula, non tabula', 'This is a letter, not a sealed document. Open it in Lege.'];
   if (e instanceof TransitError) return ['Litterae corruptae', 'The signs were damaged on the way. Ask for the letter again.'];
   return ['Error', e.message || String(e)];
 }
@@ -457,7 +460,7 @@ VIEWS.read = () => {
           : e.code === 'replay' ? notice('Iam lecta', 'This letter was already read, or it is a replay. Read it again in Epistulae.')
           : e.code === 'unknownpad' ? notice('Clavis ignota', 'You do not hold the key this letter was written with.')
           : e.code === 'direction' ? notice('Speculum', 'This letter was written by you, not to you.')
-          : notice(a, b));
+          : notice(...errorText(e)));
       }
     } }, 'DECIPHER', h('small', null, 'resigna')),
     out,
@@ -604,13 +607,13 @@ function passFields(confirmToo) {
         h('button', { class: 'btn ghost', style: 'min-height:36px; font-size:12px', onclick: () => { docPass = null; go('tabularium'); } }, 'Forget it'))
     : h('div', null,
         h('label', { class: 'field' }, h('span', null, 'Document passphrase'), p1),
-        confirmToo ? h('label', { class: 'field', style: 'margin-top:12px' }, h('span', null, 'Once more'), p2) : null,
+        confirmToo ? h('label', { class: 'field', style: 'margin-top:12px' }, h('span', null, confirmToo === 'sealing' ? 'Once more (only when sealing)' : 'Once more'), p2) : null,
         h('label', { class: 'check', style: 'margin-top:12px' }, remember, h('span', null, 'Remember it until the scriptorium closes')));
   return {
     el: wrap,
-    get() {
+    get({ sealing = confirmToo === true } = {}) {
       if (docPass) return docPass;
-      if (confirmToo && p1.value !== p2.value) throw new Error('The two passphrases differ.');
+      if (confirmToo && sealing && p1.value !== p2.value) throw new Error('The two passphrases differ.');
       const v = p1.value;
       if (remember.checked) docPass = v;
       p1.value = p2.value = '';
@@ -633,6 +636,9 @@ VIEWS.tabularium = () => {
   const openIn = h('input', { type: 'file', accept: '.age,application/octet-stream' });
   const op = passFields(false);
   const openErr = h('div'), openOut = h('div');
+  const tabIn = h('textarea', { class: 'cipher', style: 'font-family: var(--signa), \'EB Garamond\', serif', spellcheck: 'false' });
+  const tp = passFields('sealing');
+  const tabErr = h('div'), tabOut = h('div');
 
   page('TABULARIUM', 'Private documents', [
     h('p', { class: 'initial' }, 'Seal your own records before you keep them in Google Drive or anywhere else. Only someone with the document passphrase can open them.'),
@@ -683,6 +689,36 @@ VIEWS.tabularium = () => {
       } catch (e) { showError(openErr, e); }
     } }, 'APERI', h('small', null, 'open')),
     openOut,
+
+    h('h2', { class: 'rubric' }, 'Tabula · Sealed Google Docs'),
+    h('p', { class: 'small' }, 'A Tabula is a document written only in signs, for example inside a Google Doc sealed with the Chrome extension. Here you can read one by pasting its signs, or write one to paste into a document.'),
+    tabErr,
+    h('label', { class: 'field' }, h('span', null, 'Paste the signs (INCIPIT TABULA … EXPLICIT), or write plain text to seal'), tabIn),
+    tp.el,
+    h('div', { class: 'row' },
+      h('button', { class: 'btn', onclick: async () => {
+        clear(tabErr); clear(tabOut);
+        try {
+          const pass = tp.get();
+          const r = await busy('Opening…', () => openText(tabIn.value, pass));
+          tabOut.append(h('div', { class: 'panel ornate' },
+            r.title ? h('h3', { style: 'margin:0 0 8px; font-family:Cinzel,serif; font-size:16px' }, r.title) : null,
+            h('div', { class: 'plaintext', style: 'font-size:18px' }, r.text)));
+        } catch (e) { showError(tabErr, e); }
+      } }, 'LEGE TABULAM', h('small', null, 'read')),
+      h('button', { class: 'btn ghost', onclick: async () => {
+        clear(tabErr); clear(tabOut);
+        try {
+          if (!tabIn.value.trim()) throw new Error('Write the text to seal.');
+          if (tabIn.value.includes('INCIPIT TABULA')) throw new Error('This is already sealed.');
+          const pass = tp.get({ sealing: true });
+          const a = await busy('Sealing…', () => sealText({ title: '', text: tabIn.value }, pass));
+          tabIn.value = a;
+          tabOut.append(notice('Obsignata', 'The box now holds the signs. Copy them into a Google Doc (or anywhere).', true),
+            h('button', { class: 'btn block', onclick: async () => { try { await navigator.clipboard.writeText(a); toast('Copied.'); } catch { toast('Select the text by hand.'); } } }, 'COPY'));
+        } catch (e) { showError(tabErr, e); }
+      } }, 'SCRIBE TABULAM', h('small', null, 'seal text'))),
+    tabOut,
   ]);
 };
 

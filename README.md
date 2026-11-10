@@ -4,7 +4,7 @@
 
 Private letters between two people, enciphered with a genuine One-Time Pad and dressed as a medieval astronomical manuscript. It is a web app (PWA): it installs on iPhone, Android, Windows and macOS from one link, works fully offline, and needs no account.
 
-> **Status: v1.2.0, not independently audited.** Read [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) before trusting it with anything that matters.
+> **Status: v1.5.0, not independently audited.** Read [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) before trusting it with anything that matters.
 
 ## How it works
 
@@ -15,6 +15,8 @@ Private letters between two people, enciphered with a genuine One-Time Pad and d
 - **Transport**: letters become groups of 32 astrological and alchemical signs, which you can send by any messenger. The signs are only an encoding and add no security.
 
 Full specification: [docs/PROTOCOL.md](docs/PROTOCOL.md).
+
+**Passphrase generator** (since v1.3): six random words from about 6,400 Italian, Latin, English and French words (about 76 bits), with optional dice mixed in. See `src/core/verba.js`.
 
 **Tabularium** (since v1.1): seal your own documents in the open age format for Google Drive or any storage. See [docs/TABULARIUM.md](docs/TABULARIUM.md). Since v1.2, **Tabula** also seals Google Docs into astrological signs, readable only through the extension or the app. An optional Chrome extension in `extension/` opens and uploads sealed files and sealed Google Docs directly on Google: setup in [docs/EXTENSION_SETUP.md](docs/EXTENSION_SETUP.md).
 
@@ -76,6 +78,7 @@ Third-party code (vendored):
 - `vendor/argon2.umd.min.js` from hash-wasm 4.13.0 (MIT). SHA-256: `acfe11b015852f593aaddc51116f71dc7850e4551e6b34d42c1f88cf39635f03`.
 - `vendor/age.bundle.js`: age-encryption 0.3.1 (BSD-3-Clause) with @noble and @scure libraries (MIT), bundled with esbuild. Provenance is in the file header.
 - Fonts under the SIL Open Font License; see `fonts/LICENSES.md`.
+- Word list (`src/core/wordlist.js`): BIP39 English, Italian and French lists (MIT, bitcoin/bips) and Latin nouns from William Whitaker's WORDS (free for any use), built by `tools/make_wordlist.py`.
 
 ## Repository map
 

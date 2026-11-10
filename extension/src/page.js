@@ -1,6 +1,7 @@
 // Tabularium extension page. Decryption happens here, in the extension's own
 // origin: Google's pages never see the passphrase or the decrypted content.
 import { h, clear, download } from './ui/dom.js';
+import { generaPanel } from './ui/genera.js';
 import { sealFile, openFile, mimeFor, checkDocPassphrase } from './core/tabularium.js';
 import { Drive, chromeTokenProvider, FOLDER_NAME } from './drive.js';
 
@@ -46,6 +47,7 @@ function passBlock(stored, confirmToo) {
     : h('div', null,
         h('label', { class: 'field' }, h('span', null, 'Document passphrase'), p1),
         confirmToo ? h('label', { class: 'field', style: 'margin-top:10px' }, h('span', null, 'Once more (only needed when sealing)'), p2) : null,
+        confirmToo ? generaPanel([p1, p2]) : null,
         h('label', { class: 'check', style: 'margin-top:10px' }, rem, h('span', null, 'Remember it until Chrome closes')));
   return {
     el,

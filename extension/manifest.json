@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Clavis Astrae · Tabularium",
   "short_name": "Tabularium",
-  "version": "1.2.0",
+  "version": "1.5.0",
   "description": "Seal your Google Docs into astrological signs and your files into .age, and open them only on this computer.",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtledt0t5ioxvUumnR6srlSj2Fz1uPrPkVqz74Pmm9S7LE3jMyKTZMXLdUGQZ4EVRtA40YUJ/pxZOEtNb/rKrtaf2SoMXQuuf7eK8+j6vK2LYnP+OWjEN8Zh/GnCqtQsZCSEqIOJZN53sgTPbPajyhOvguU6mUG7GJSV9eOllzvKeDzv4RGPEDHJDaApUiThKr4yFCOIEO60IWpp0u28yMyKb6MnLtKgIHTZy0yo2Cw+FPgVKJkmyOiVQzpxyEAQMT/M4kKHtdBYDab74t0obR+YGvsWySbGhH58nUMz9BZ5NSVZJ7pU3F4TuJgjfuBzGcNBfp20va4nECqOJZxxsuwIDAQAB",
   "icons": {

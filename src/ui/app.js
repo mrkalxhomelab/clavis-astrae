@@ -10,6 +10,7 @@ import { utf8, toHex } from '../core/bytes.js';
 import { MIN_PASSPHRASE } from '../core/vault.js';
 import { sealFile, openFile, mimeFor, MIN_DOC_PASSPHRASE } from '../core/tabularium.js';
 import { sealText, openText } from '../core/tabula.js';
+import { generaPanel } from './genera.js';
 
 const app = document.getElementById('app');
 const session = new Session(new IDBStore());
@@ -118,7 +119,8 @@ VIEWS.gate = async (msg) => {
       h('p', { class: 'initial' }, 'Found your scriptorium. Choose a passphrase to seal the keys kept on this device. It never leaves this device, and it cannot be recovered if forgotten.'),
       h('label', { class: 'field' }, h('span', null, 'Passphrase'), p1),
       h('label', { class: 'field' }, h('span', null, 'Once more'), p2),
-      h('p', { class: 'small' }, `At least ${MIN_PASSPHRASE} characters. A sentence of five or six unusual words is strong and memorable.`),
+      h('p', { class: 'small' }, `At least ${MIN_PASSPHRASE} characters. Best: let the app draw six random words for you.`),
+      generaPanel([p1, p2]),
       err,
       h('button', { class: 'btn block', onclick: async () => {
         if (p1.value !== p2.value) return showError(err, { code: 'x', message: 'The two passphrases differ.' });
@@ -197,7 +199,7 @@ VIEWS.home = () => {
   clear(app);
   const pads = session.pads();
   const masthead = h('header', { class: 'masthead' },
-    h('button', { class: 'iconbtn', style: 'position:absolute; right:8px; top:calc(8px + env(safe-area-inset-top))', 'aria-label': 'Lock the vault (Obsera)', title: 'Obsera', onclick: () => lockNow('Obseratum') }, icon('lock')),
+    h('button', { class: 'iconbtn', style: 'position:absolute; right:22px; top:calc(18px + env(safe-area-inset-top)); z-index:2', 'aria-label': 'Lock the vault (Obsera)', title: 'Obsera', onclick: () => lockNow('Obseratum') }, icon('lock')),
     astrolabe(), h('h1', null, 'CLAVIS ASTRAE'), h('div', { class: 'motto' }, 'DE OCCULTIS STELLARUM'));
   const summary = pads.length
     ? h('p', { class: 'small', style: 'text-align:center' }, `${pads.length} ${pads.length === 1 ? 'key' : 'keys'} in the vault · ${session.letters().length} letters`)
@@ -544,6 +546,7 @@ VIEWS.settings = async () => {
     h('h2', { class: 'rubric' }, 'Nova tessera'),
     h('label', { class: 'field' }, h('span', null, 'New passphrase'), np1),
     h('label', { class: 'field' }, h('span', null, 'Once more'), np2),
+    generaPanel([np1, np2]),
     h('button', { class: 'btn ghost block', onclick: async () => {
       try {
         if (np1.value !== np2.value) throw new Error('The two passphrases differ.');
@@ -608,6 +611,7 @@ function passFields(confirmToo) {
     : h('div', null,
         h('label', { class: 'field' }, h('span', null, 'Document passphrase'), p1),
         confirmToo ? h('label', { class: 'field', style: 'margin-top:12px' }, h('span', null, confirmToo === 'sealing' ? 'Once more (only when sealing)' : 'Once more'), p2) : null,
+        confirmToo ? generaPanel([p1, p2]) : null,
         h('label', { class: 'check', style: 'margin-top:12px' }, remember, h('span', null, 'Remember it until the scriptorium closes')));
   return {
     el: wrap,

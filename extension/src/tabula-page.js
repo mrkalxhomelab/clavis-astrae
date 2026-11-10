@@ -1,6 +1,7 @@
 // Sealed Google Docs (Tabula): seal a document into glyphs, or open, edit and
 // re-seal one. Everything is decrypted here, in the extension's own page.
 import { h, clear, download } from './ui/dom.js';
+import { generaPanel } from './ui/genera.js';
 import { sealText, openText, isTabula } from './core/tabula.js';
 import { checkDocPassphrase } from './core/tabularium.js';
 import { TransitError } from './core/codec.js';
@@ -21,11 +22,26 @@ function errText(e) {
   if (e.code === 'weak' || e.code === 'toolong') return ['Cave', e.message];
   if (e.status === 401) return ['Non conexum', 'Connect your Google account first.'];
   if (e.status === 400 && /revision/i.test(e.message)) return ['Mutatum', 'The document changed on Google since you opened it. Reload this page and open it again; your edits are still in the box, copy them first.'];
-  if (e.status === 403 || e.status === 404) return ['Non accessibile', 'This document cannot be opened with your account.'];
+  if (e.status === 403 && /has not been used|is disabled|SERVICE_DISABLED/i.test(e.message)) return ['API non activa', `The Google Docs API is not enabled in your Google Cloud project. Enable it (APIs & Services → Library → Google Docs API), wait a minute, then reload. (${e.message})`];
+  if (e.status === 403 && /insufficient|scope|permission/i.test(e.message)) return ['Licentia deest', `Google gave this extension an older permission without access to Docs. Press RECONNECT below and allow access to Google Docs. (${e.message})`];
+  if (e.status === 400 && /not supported/i.test(e.message)) return ['Non Google Doc', 'This is a Word or other uploaded file shown in Docs, not a native Google Doc. In Docs choose File → Save as Google Docs, then use the copy.'];
+  if (e.status === 403 || e.status === 404) return ['Non accessibile', `Google refused access to this document. If you are signed into several Google accounts, the document must belong to the one Chrome is signed into. Press RECONNECT to choose again. (${e.message})`];
   if (e.status) return ['Error Google', e.message];
   return ['Error', e.message || String(e)];
 }
-const showErr = (where, e) => { clear(where); const [a, b] = errText(e); where.append(notice(a, b)); };
+async function reconnect() {
+  await new Promise((r) => (chrome.identity.clearAllCachedAuthTokens ? chrome.identity.clearAllCachedAuthTokens(r) : r()));
+  await tokens.getToken(true);
+  location.reload();
+}
+const showErr = (where, e) => {
+  clear(where);
+  const [a, b] = errText(e);
+  where.append(notice(a, b));
+  if (e.status === 401 || e.status === 403 || e.status === 404) {
+    where.append(h('button', { class: 'btn ghost block', style: 'margin-top:10px', onclick: () => reconnect().catch((x) => showErr(where, x)) }, 'RECONNECT'));
+  }
+};
 async function busy(msg, fn) {
   const b = h('div', { class: 'busy', role: 'alert' }, h('div', null, msg));
   document.body.append(b);
@@ -52,6 +68,7 @@ async function passInputs(confirmToo) {
     el: s ? h('p', { class: 'small' }, 'Using the document passphrase remembered until Chrome closes.') : h('div', null,
       h('label', { class: 'field' }, h('span', null, 'Document passphrase'), p1),
       confirmToo ? h('label', { class: 'field', style: 'margin-top:10px' }, h('span', null, 'Once more'), p2) : null,
+      confirmToo ? generaPanel([p1, p2]) : null,
       h('label', { class: 'check', style: 'margin-top:10px' }, rem, h('span', null, 'Remember it until Chrome closes'))),
     async get() {
       if (s) return s;

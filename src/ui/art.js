@@ -4,17 +4,60 @@ import { ALPHABET } from '../core/codec.js';
 import { fromHex } from '../core/bytes.js';
 
 export function astrolabe(cls = 'astrolabe') {
-  const ticks = Array.from({ length: 24 }, (_, i) => {
-    const a = (i * Math.PI) / 12, r1 = 30, r2 = i % 2 ? 27 : 25;
-    return `<line x1="${32 + r1 * Math.cos(a)}" y1="${32 + r1 * Math.sin(a)}" x2="${32 + r2 * Math.cos(a)}" y2="${32 + r2 * Math.sin(a)}" stroke="#C9A646" stroke-width="0.8"/>`;
-  }).join('');
-  return svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="${cls}" aria-hidden="true">
-<circle cx="32" cy="32" r="30.5" fill="none" stroke="#C9A646" stroke-width="1.2"/>
-<circle cx="32" cy="32" r="22" fill="none" stroke="#C9A646" stroke-width="0.6"/>
-<ellipse cx="32" cy="36" rx="17" ry="12" fill="none" stroke="#C9A646" stroke-width="0.5"/>
+  const C = 100, P = (r, deg) => { const a = (deg - 90) * Math.PI / 180; return [C + r * Math.cos(a), C + r * Math.sin(a)]; };
+  const f = (n) => n.toFixed(2);
+  // limb: degree ticks
+  let ticks = '';
+  for (let d = 0; d < 360; d += 5) {
+    const [x1, y1] = P(96, d), [x2, y2] = P(d % 30 === 0 ? 86 : d % 15 === 0 ? 89 : 91, d);
+    ticks += `<line x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}" stroke="#6B4C10" stroke-width="${d % 30 === 0 ? 1.1 : .5}"/>`;
+  }
+  // rete: zodiac band with the twelve signs (turns slowly)
+  let band = '';
+  ALPHABET.slice(7, 19).forEach((a, i) => {
+    const [x, y] = P(73, i * 30 + 15), [lx1, ly1] = P(64, i * 30), [lx2, ly2] = P(82, i * 30);
+    band += `<line x1="${f(lx1)}" y1="${f(ly1)}" x2="${f(lx2)}" y2="${f(ly2)}" stroke="#A9822A" stroke-width=".7"/>`;
+    band += `<text x="${f(x)}" y="${f(y + 4.5)}" text-anchor="middle" font-size="13" font-family="Signa, Signa2, serif" fill="#8E2318" transform="rotate(${i * 30 + 15} ${f(x)} ${f(y)})">${a.g}\uFE0E</text>`;
+  });
+  // stars of the rete, with pointers
+  const starAt = [[52, 20], [44, 75], [56, 130], [40, 200], [50, 250], [34, 305], [26, 160]];
+  let stars = '';
+  for (const [r, d] of starAt) {
+    const [x, y] = P(r, d), [px, py] = P(r + 7, d);
+    stars += `<path d="M${f(x)} ${f(y)} Q${f((x + px) / 2 + 2)} ${f((y + py) / 2 - 2)} ${f(px)} ${f(py)}" stroke="#A9822A" stroke-width=".8" fill="none"/>`;
+    stars += `<path class="stella" d="M${f(px)} ${f(py - 3.4)} L${f(px + .9)} ${f(py - .9)} L${f(px + 3.4)} ${f(py)} L${f(px + .9)} ${f(py + .9)} L${f(px)} ${f(py + 3.4)} L${f(px - .9)} ${f(py + .9)} L${f(px - 3.4)} ${f(py)} L${f(px - .9)} ${f(py - .9)} Z" fill="#C9A646"/>`;
+  }
+  // tympan: almucantars and horizon
+  let tymp = '';
+  for (let k = 0; k < 6; k++) tymp += `<ellipse cx="100" cy="${f(108 - k * 4)}" rx="${f(54 - k * 8)}" ry="${f(40 - k * 6.5)}" fill="none" stroke="#6B4C10" stroke-width=".35" opacity=".7"/>`;
+  return svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -18 200 218" class="${cls}" aria-hidden="true">
+<defs>
+<radialGradient id="aur" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#F3DE9C"/><stop offset=".55" stop-color="#C9A646"/><stop offset="1" stop-color="#8A6418"/></radialGradient>
+<radialGradient id="mater" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#F6ECCF" stop-opacity=".9"/><stop offset="1" stop-color="#D9C38E" stop-opacity=".9"/></radialGradient>
+</defs>
+<circle cx="100" cy="-6" r="9" fill="none" stroke="url(#aur)" stroke-width="3"/>
+<path d="M88 6 Q100 -4 112 6 L108 12 Q100 6 92 12 Z" fill="url(#aur)" stroke="#6B4C10" stroke-width=".6"/>
+<circle cx="100" cy="100" r="98" fill="url(#aur)" stroke="#5A3E0C" stroke-width="1"/>
+<circle cx="100" cy="100" r="92" fill="url(#mater)" stroke="#6B4C10" stroke-width=".8"/>
 ${ticks}
-<path d="M32 7 L34.6 29.4 L57 32 L34.6 34.6 L32 57 L29.4 34.6 L7 32 L29.4 29.4 Z" fill="#C9A646"/>
-<circle cx="32" cy="32" r="3.6" fill="#16213A" stroke="#C9A646" stroke-width="1"/>
+<circle cx="100" cy="100" r="84" fill="none" stroke="#6B4C10" stroke-width=".6"/>
+${tymp}
+<line x1="44" y1="112" x2="156" y2="112" stroke="#6B4C10" stroke-width=".5"/>
+<g class="rete">
+<circle cx="100" cy="100" r="82" fill="none" stroke="#A9822A" stroke-width="1.6"/>
+<circle cx="100" cy="100" r="64" fill="none" stroke="#A9822A" stroke-width="1.2"/>
+${band}
+${stars}
+<circle cx="100" cy="100" r="30" fill="none" stroke="#A9822A" stroke-width="1"/>
+<path d="M100 36 L100 164 M36 100 L164 100" stroke="#A9822A" stroke-width=".6" opacity=".7"/>
+</g>
+<g transform="rotate(32 100 100)">
+<path d="M100 10 L104 100 L100 190 L96 100 Z" fill="url(#aur)" stroke="#5A3E0C" stroke-width=".6"/>
+</g>
+<circle cx="100" cy="100" r="13" fill="url(#aur)" stroke="#5A3E0C" stroke-width=".8"/>
+<g stroke="#8E2318" stroke-width="1.2">${Array.from({ length: 12 }, (_, i) => { const [x1, y1] = P(13, i * 30), [x2, y2] = P(19, i * 30); return `<line x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}"/>`; }).join('')}</g>
+<circle cx="100" cy="100" r="6" fill="#8E2318"/>
+<circle cx="100" cy="100" r="2" fill="#F3DE9C"/>
 </svg>`);
 }
 

@@ -35,6 +35,11 @@ export const MANUAL = [
     'This is strong standard encryption (scrypt, ChaCha20-Poly1305), not the One-Time Pad: its strength rests on your passphrase. Choose “Hide the file name” to give the sealed file a random name.',
     'A Tabula is a text sealed into signs, to keep inside a Google Doc. On a computer the Chrome extension seals, opens and edits Google Docs directly. Here, paste the signs to read them, or seal a text and paste the signs into a document. Only plain text is kept, not formatting.',
   ]],
+  ['Tessera', 'Choosing a passphrase', [
+    'Let chance choose, not you. “Genera passphrase” draws six words at random from about 6,400 Italian, Latin, English and French words, using your device’s cryptographic generator: about 76 bits, beyond any brute-force attack. Seven words give about 88 bits.',
+    'If you wish, roll an ordinary die and add the numbers: they are mixed with the device’s randomness, so the result is safe if either of the two is truly random.',
+    'Never use a famous phrase, quotation or verse, however obscure: such phrases are the first ones attackers try. Write the passphrase on paper until you know it by heart.',
+  ]],
   ['Pericula', 'What this cannot protect against', [
     'Malware on either phone or computer can read everything. A One-Time Pad does not protect an infected device.',
     'Someone who holds your unlocked device can read and write as you.',

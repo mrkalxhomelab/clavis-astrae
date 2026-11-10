@@ -5,13 +5,15 @@
 <title>Tabularium</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
-  body { background: var(--night); min-height: 0; }
-  .pop { width: 300px; padding: 18px; background: var(--night); color: var(--parchment); text-align: center; display: flex; flex-direction: column; gap: 10px; }
-  .pop h1 { font-family: 'Cinzel', serif; letter-spacing: .14em; font-size: 18px; margin: 4px 0 0; }
-  .pop p { font-style: italic; color: var(--gold-bright); font-size: 14px; margin: 0 0 6px; }
+  body { background: var(--night-deep); min-height: 0; }
+  #app { display: none; }
+  .pop { width: 300px; padding: 18px; background: var(--vellum); background-image: var(--noise); outline: 3px double var(--gold); outline-offset: -8px; color: var(--ink); color: var(--parchment); text-align: center; display: flex; flex-direction: column; gap: 10px; }
+  .pop h1 { font-family: 'Cinzel', serif; letter-spacing: .14em; font-size: 18px; margin: 4px 0 0; color: var(--rubric); }
+  .pop p { font-style: italic; color: var(--gold-text); font-size: 14px; margin: 0 0 6px; }
   .pop img { width: 48px; height: 48px; margin: 0 auto; }
-  .pop .btn.ghost { color: var(--gold-bright); border-color: var(--gold-bright); }
   [hidden] { display: none !important; }
+  .pop .btn { font-size: 13px; letter-spacing: .1em; padding: 0 12px; }
+  .pop .btn::before, .pop .btn::after { display: none; }
 </style>
 </head>
 <body>
